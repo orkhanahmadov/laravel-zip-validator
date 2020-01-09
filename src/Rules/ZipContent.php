@@ -85,7 +85,7 @@ class ZipContent implements Rule
     public function message(): string
     {
         return __('zip-validator::messages.not_found', [
-            'files' => $this->failedFiles->first(),
+            'files' => $this->failedFiles->implode(', '),
         ]);
     }
 }
