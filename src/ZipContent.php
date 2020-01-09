@@ -3,17 +3,29 @@
 namespace Orkhanahmadov\LaravelZipValidator;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class ZipContent implements Rule
 {
     /**
+     * @var \Illuminate\Contracts\Filesystem\Filesystem
+     */
+    private $storage;
+    /**
+     * @var ZipArchive
+     */
+    private $archive;
+
+    /**
      * Create a new rule instance.
      *
-     * @return void
+     * @param string|null $storage
      */
-    public function __construct()
+    public function __construct(?string $storage = null)
     {
-        //
+        $this->storage = Storage::disk($storage);
+        $this->archive = new ZipArchive();
     }
 
     /**
@@ -23,7 +35,7 @@ class ZipContent implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         //
     }
