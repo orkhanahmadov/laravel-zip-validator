@@ -47,10 +47,7 @@
         "laravel": {
             "providers": [
                 "Orkhanahmadov\\LaravelZipValidator\\LaravelZipValidatorServiceProvider"
-            ],
-            "aliases": {
-                "LaravelZipValidator": "Orkhanahmadov\\LaravelZipValidator\\LaravelZipValidatorFacade"
-            }
+            ]
         }
     }
 }

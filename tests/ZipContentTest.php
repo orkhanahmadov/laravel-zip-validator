@@ -3,7 +3,7 @@
 namespace Orkhanahmadov\LaravelZipValidator\Tests;
 
 use Illuminate\Http\UploadedFile;
-use Orkhanahmadov\LaravelZipValidator\ZipContent;
+use Orkhanahmadov\LaravelZipValidator\Rules\ZipContent;
 
 class ZipContentTest extends TestCase
 {

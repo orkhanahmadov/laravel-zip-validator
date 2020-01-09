@@ -1,6 +1,6 @@
 <?php
 
-namespace Orkhanahmadov\LaravelZipValidator;
+namespace Orkhanahmadov\LaravelZipValidator\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Collection;
@@ -19,6 +19,10 @@ class ZipContent implements Rule
      */
     private $storage;
     /**
+     * @var string
+     */
+    private $workingDirectory;
+    /**
      * @var ZipArchive
      */
     private $archive;
@@ -33,6 +37,7 @@ class ZipContent implements Rule
     {
         $this->files = is_array($files) ? collect($files) : collect(explode(',', $files));
         $this->storage = Storage::disk($storage ?: config('filesystems.default'));
+        $this->workingDirectory = uniqid('zip-');
         $this->archive = new ZipArchive();
     }
 
@@ -45,25 +50,27 @@ class ZipContent implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $zipFile = $this->storage->putFileAs($directory = uniqid('zip-'), $value, 'file.zip');
+        $storedZipPath = $this->storage->putFile($this->workingDirectory = uniqid('zip-'), $value);
+        $this->extractZip($storedZipPath);
 
+        $failedFiles = $this->files->reject(function ($file) {
+            return $this->storage->exists($this->workingDirectory . '/' . $file);
+        });
+
+        $this->storage->deleteDirectory($this->workingDirectory);
+
+        return ! $failedFiles->count();
+    }
+
+    private function extractZip(string $path): void
+    {
         throw_unless(
-            $this->archive->open($this->storage->path($zipFile)) === true,
+            $this->archive->open($this->storage->path($path)) === true,
             new FileException('Could not open file.')
         );
 
-        $this->archive->extractTo($this->storage->path($directory));
+        $this->archive->extractTo($this->storage->path($this->workingDirectory));
         $this->archive->close();
-
-        $this->storage->delete($zipFile);
-
-        $failedFiles = $this->files->reject(function ($file) use ($directory) {
-            return $this->storage->exists($directory . '/' . $file);
-        });
-
-        $this->storage->deleteDirectory($directory);
-
-        return ! $failedFiles->count();
     }
 
     /**
