@@ -26,6 +26,10 @@ class ZipContent implements Rule
      * @var ZipArchive
      */
     private $archive;
+    /**
+     * @var Collection
+     */
+    private $failedFiles;
 
     /**
      * Create a new rule instance.
@@ -53,13 +57,13 @@ class ZipContent implements Rule
         $storedZipPath = $this->storage->putFile($this->workingDirectory = uniqid('zip-'), $value);
         $this->extractZip($storedZipPath);
 
-        $failedFiles = $this->files->reject(function ($file) {
+        $this->failedFiles = $this->files->reject(function ($file) {
             return $this->storage->exists($this->workingDirectory . '/' . $file);
         });
 
         $this->storage->deleteDirectory($this->workingDirectory);
 
-        return ! $failedFiles->count();
+        return ! $this->failedFiles->count();
     }
 
     private function extractZip(string $path): void
@@ -78,8 +82,10 @@ class ZipContent implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
-        return 'The validation error message.';
+        return __('zip-validator::messages.not_found', [
+            'files' => $this->failedFiles->first(),
+        ]);
     }
 }

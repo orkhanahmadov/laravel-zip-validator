@@ -11,11 +11,11 @@ class LaravelZipValidatorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang/', 'zip-validator');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/', 'zip-validator');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/zip-validator'),
+                __DIR__ . '/../resources/lang' => resource_path('lang/vendor/zip-validator'),
             ], 'lang');
         }
     }
