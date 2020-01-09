@@ -1,0 +1,56 @@
+{
+    "name": "orkhanahmadov/laravel-zip-validator",
+    "description": "Laravel ZIP file content validator",
+    "keywords": [
+        "orkhanahmadov",
+        "laravel-zip-validator"
+    ],
+    "homepage": "https://github.com/orkhanahmadov/laravel-zip-validator",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Orkhan Ahmadov",
+            "email": "ahmadov90@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "ext-zip": "*",
+        "illuminate/contracts": "5.8.*|^6.0",
+        "illuminate/support": "5.8.*|^6.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "3.8.*|^4.0",
+        "phpunit/phpunit": "^7.0|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Orkhanahmadov\\LaravelZipValidator\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Orkhanahmadov\\LaravelZipValidator\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Orkhanahmadov\\LaravelZipValidator\\LaravelZipValidatorServiceProvider"
+            ],
+            "aliases": {
+                "LaravelZipValidator": "Orkhanahmadov\\LaravelZipValidator\\LaravelZipValidatorFacade"
+            }
+        }
+    }
+}
