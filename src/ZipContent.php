@@ -9,6 +9,10 @@ use ZipArchive;
 class ZipContent implements Rule
 {
     /**
+     * @var array
+     */
+    private $files;
+    /**
      * @var \Illuminate\Contracts\Filesystem\Filesystem
      */
     private $storage;
@@ -20,10 +24,12 @@ class ZipContent implements Rule
     /**
      * Create a new rule instance.
      *
+     * @param array|string $files
      * @param string|null $storage
      */
-    public function __construct(?string $storage = null)
+    public function __construct($files, ?string $storage = null)
     {
+        $this->files = is_array($files) ? $files : explode(',', $files);
         $this->storage = Storage::disk($storage);
         $this->archive = new ZipArchive();
     }
