@@ -28,15 +28,15 @@ composer require orkhanahmadov/laravel-zip-validator
 
 ## Usage
 
-Use `Orkhanahmadov\LaravelZipValidator\Rules\ZipContent` rule with list of required files.
+Use `ZipContent` rule with list of required files.
 
 ``` php
-use Orkhanahmadov\LaravelZipValidator\Rules\ZipContent;
+use Orkhanahmadov\ZipValidator\Rules\ZipContent;
 
 public function rules()
 {
     return [
-        'file' => ['required', 'file', 'mimes:zip', new ZipContent(['thumb.jpg', 'assets/logo.png'])],
+        'file' => ['required', 'file', 'mimes:zip', new ZipContent('thumb.jpg', 'assets/logo.png')],
     ];
 }
 ```
