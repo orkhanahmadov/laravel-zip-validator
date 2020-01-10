@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Orkhanahmadov\LaravelZipValidator\Exceptions\ZipException;
 use ZipArchive;
 
 class ZipContent implements Rule
@@ -54,45 +55,29 @@ class ZipContent implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        dd($value->path());
+        $content = $this->readZip($value);
 
-        $storedZipPath = $this->storage->putFile($this->workingDirectory = uniqid('zip-'), $value);
-        $this->extractZip($storedZipPath);
-
-        $this->failedFiles = $this->files->reject(function ($file) {
-            return $this->storage->exists($this->workingDirectory . '/' . $file);
+        $this->failedFiles = $this->files->reject(function ($file) use ($content) {
+            return $content->contains($file);
         });
-
-        $this->storage->deleteDirectory($this->workingDirectory);
 
         return ! $this->failedFiles->count();
     }
 
-    private function extractZip(string $path): void
+    private function readZip(UploadedFile $value): Collection
     {
-//        $file = file_get_contents();
-//
-//        dd($file);
+        $zip = zip_open($value->path());
 
-        $zip = zip_open(file_get_contents('https://file-examples.com/wp-content/uploads/2017/02/zip_2MB.zip'));
+        throw_unless(!is_int($zip), new ZipException($zip));
 
-//        dd(var_dump($zip));
-
-//        throw_unless(
-//            $zip === true,
-//            new FileException('Could not open file.')
-//        );
-
+        $content = collect();
         while ($file = zip_read($zip)) {
-            echo  zip_entry_name($file).PHP_EOL;
+            $content->add(zip_entry_name($file));
         }
 
-        die;
+        zip_close($zip);
 
-        dd(zip_read($zip));
-
-        $this->archive->extractTo($this->storage->path($this->workingDirectory));
-        $this->archive->close();
+        return $content;
     }
 
     /**
