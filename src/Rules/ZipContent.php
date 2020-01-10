@@ -3,9 +3,9 @@
 namespace Orkhanahmadov\LaravelZipValidator\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use ZipArchive;
 
 class ZipContent implements Rule
@@ -49,11 +49,13 @@ class ZipContent implements Rule
      * Determine if the validation rule passes.
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param UploadedFile $value
      * @return bool
      */
     public function passes($attribute, $value): bool
     {
+        dd($value->path());
+
         $storedZipPath = $this->storage->putFile($this->workingDirectory = uniqid('zip-'), $value);
         $this->extractZip($storedZipPath);
 
@@ -68,10 +70,26 @@ class ZipContent implements Rule
 
     private function extractZip(string $path): void
     {
-        throw_unless(
-            $this->archive->open($this->storage->path($path)) === true,
-            new FileException('Could not open file.')
-        );
+//        $file = file_get_contents();
+//
+//        dd($file);
+
+        $zip = zip_open(file_get_contents('https://file-examples.com/wp-content/uploads/2017/02/zip_2MB.zip'));
+
+//        dd(var_dump($zip));
+
+//        throw_unless(
+//            $zip === true,
+//            new FileException('Could not open file.')
+//        );
+
+        while ($file = zip_read($zip)) {
+            echo  zip_entry_name($file).PHP_EOL;
+        }
+
+        die;
+
+        dd(zip_read($zip));
 
         $this->archive->extractTo($this->storage->path($this->workingDirectory));
         $this->archive->close();

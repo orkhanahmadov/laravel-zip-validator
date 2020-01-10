@@ -1,21 +1,55 @@
 language: php
 
-php:
-  - 7.1
-  - 7.2
-  - 7.3
+cache:
+    directories:
+        - $HOME/.composer/cache/files
 
 env:
-  matrix:
-    - COMPOSER_FLAGS="--prefer-lowest"
-    - COMPOSER_FLAGS=""
+    global:
+        - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
 
-before_script:
-  - travis_retry composer self-update
-  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+matrix:
+    fast_finish: true
+    include:
+        - php: 7.2
+          env: LARAVEL_VERSION=5.8.* TESTBENCH_VERSION=3.8.* PHPUNIT_VERSION=~7.0
+        - php: 7.2
+          env: LARAVEL_VERSION=~6.0  TESTBENCH_VERSION=~4.0  PHPUNIT_VERSION=~8.0
+
+        - php: 7.3
+          env: LARAVEL_VERSION=5.8.* TESTBENCH_VERSION=3.8.* PHPUNIT_VERSION=~7.0
+        - php: 7.3
+          env: LARAVEL_VERSION=~6.0  TESTBENCH_VERSION=~4.0  PHPUNIT_VERSION=~8.0
+
+        - php: 7.4
+          env: LARAVEL_VERSION=5.8.* TESTBENCH_VERSION=3.8.* PHPUNIT_VERSION=~7.0
+        - php: 7.4
+          env: LARAVEL_VERSION=~6.0  TESTBENCH_VERSION=~4.0  PHPUNIT_VERSION=~8.0
+
+before_install:
+    - travis_retry composer self-update
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
+    - composer global require hirak/prestissimo --update-no-dev
+
+install:
+    - composer require "illuminate/http:${LARAVEL_VERSION}" --no-update --no-interaction --prefer-dist
+    - composer require "illuminate/contracts:${LARAVEL_VERSION}" --no-update --no-interaction --prefer-dist
+    - composer require "illuminate/support:${LARAVEL_VERSION}" --no-update --no-interaction --prefer-dist
+    - composer require "orchestra/testbench:${TESTBENCH_VERSION}" --no-update --no-interaction --prefer-dist
+    - composer require "phpunit/phpunit:${PHPUNIT_VERSION}" --no-update --no-interaction --prefer-dist
+    - travis_retry composer install --no-interaction --prefer-dist --no-suggest
 
 script:
-  - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+    - vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
 
 after_script:
-  - php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
+    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+
+branches:
+    only:
+        - master
+
+notifications:
+    email: false
