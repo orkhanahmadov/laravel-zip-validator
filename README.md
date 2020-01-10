@@ -42,7 +42,7 @@ public function rules()
 ```
 
 Constructor accepts single argument:
-* `files` - list of required files inside ZIP archive.
+- `files` - list of required files inside ZIP archive.
 You can pass files as different constructor arguments or as array.
 If files are nested inside folders, pass relative path to file.
 
@@ -74,3 +74,10 @@ If you discover any security related issues, please email ahmadov90@gmail.com in
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## TODO
+
+- File size validation
+- Wildcard validation
+- Extension validation
+- "OR" validation

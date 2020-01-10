@@ -1,6 +1,6 @@
 <?php
 
-namespace Orkhanahmadov\LaravelZipValidator\Exceptions;
+namespace Orkhanahmadov\ZipValidator\Exceptions;
 
 class ZipException extends \RuntimeException
 {

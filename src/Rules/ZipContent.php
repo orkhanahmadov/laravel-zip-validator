@@ -1,11 +1,11 @@
 <?php
 
-namespace Orkhanahmadov\LaravelZipValidator\Rules;
+namespace Orkhanahmadov\ZipValidator\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use Orkhanahmadov\LaravelZipValidator\Exceptions\ZipException;
+use Orkhanahmadov\ZipValidator\Exceptions\ZipException;
 
 class ZipContent implements Rule
 {
@@ -75,7 +75,7 @@ class ZipContent implements Rule
      */
     public function message(): string
     {
-        return __('zip-validator::messages.not_found', [
+        return __('zipValidator::messages.not_found', [
             'files' => $this->failedFiles->implode(', '),
         ]);
     }

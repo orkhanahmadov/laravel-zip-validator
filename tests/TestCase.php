@@ -1,16 +1,16 @@
 <?php
 
-namespace Orkhanahmadov\LaravelZipValidator\Tests;
+namespace Orkhanahmadov\ZipValidator\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use Orkhanahmadov\LaravelZipValidator\LaravelZipValidatorServiceProvider;
+use Orkhanahmadov\ZipValidator\ZipValidatorServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
     protected function getPackageProviders($app)
     {
         return [
-            LaravelZipValidatorServiceProvider::class,
+            ZipValidatorServiceProvider::class,
         ];
     }
 }

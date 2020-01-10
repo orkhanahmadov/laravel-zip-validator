@@ -3,7 +3,10 @@
     "description": "Laravel ZIP file content validator",
     "keywords": [
         "orkhanahmadov",
-        "laravel-zip-validator"
+        "laravel",
+        "validation",
+        "zip",
+        "zip validation"
     ],
     "homepage": "https://github.com/orkhanahmadov/laravel-zip-validator",
     "license": "MIT",
@@ -28,12 +31,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Orkhanahmadov\\LaravelZipValidator\\": "src"
+            "Orkhanahmadov\\ZipValidator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Orkhanahmadov\\LaravelZipValidator\\Tests\\": "tests"
+            "Orkhanahmadov\\ZipValidator\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -47,7 +50,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Orkhanahmadov\\LaravelZipValidator\\LaravelZipValidatorServiceProvider"
+                "Orkhanahmadov\\ZipValidator\\ZipValidatorServiceProvider"
             ]
         }
     }

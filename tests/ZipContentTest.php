@@ -1,10 +1,10 @@
 <?php
 
-namespace Orkhanahmadov\LaravelZipValidator\Tests;
+namespace Orkhanahmadov\ZipValidator\Tests;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Lang;
-use Orkhanahmadov\LaravelZipValidator\Rules\ZipContent;
+use Orkhanahmadov\ZipValidator\Rules\ZipContent;
 
 class ZipContentTest extends TestCase
 {
@@ -34,7 +34,7 @@ class ZipContentTest extends TestCase
     {
         Lang::addLines([
             'messages.not_found' => 'Following files does not exist in ZIP file: :files',
-        ], Lang::getLocale(), 'zip-validator');
+        ], Lang::getLocale(), 'zipValidator');
 
         $rule = new ZipContent([
             'dummy.pdf',
