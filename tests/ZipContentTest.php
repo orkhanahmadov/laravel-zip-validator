@@ -33,7 +33,7 @@ class ZipContentTest extends TestCase
     public function test_returns_false_when_required_list_of_files_do_not_exist()
     {
         Lang::addLines([
-            'messages.not_found' => 'Following files does not exist in ZIP file: :files',
+            'messages.failed' => ':files',
         ], Lang::getLocale(), 'zipValidator');
 
         $rule = new ZipContent([
@@ -49,8 +49,78 @@ class ZipContentTest extends TestCase
             )
         );
         $this->assertSame(
-            'Following files does not exist in ZIP file: image_2.png, folder_1/text_file.png',
+            'image_2.png, folder_1/text_file.png',
             $rule->message()
+        );
+    }
+
+    public function test_file_size_check()
+    {
+        $this->assertTrue(
+            (new ZipContent([
+                'dummy.pdf' => 14000, // 13264
+                'folder_1/text_file.txt' => 16,
+            ]))
+            ->passes(
+                'attribute',
+                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
+            )
+        );
+    }
+
+    public function test_returns_false_if_file_size_does_not_meet_the_requirements()
+    {
+        $this->assertFalse(
+            (new ZipContent([
+                'dummy.pdf' => 14000,
+                'folder_1/text_file.txt' => 10,
+            ]))
+            ->passes(
+                'attribute',
+                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
+            )
+        );
+    }
+
+    public function test_returns_false_when_valid_file_size_but_wrong_file_name_passed()
+    {
+        $this->assertFalse(
+            (new ZipContent([
+                'dummy.pdf' => 14000, // 13264
+                'folder_1/text_file_2.txt' => 16,
+            ]))
+            ->passes(
+                'attribute',
+                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
+            )
+        );
+    }
+
+    public function test_true_when_valid_files_passed_as_mixed_simple_array_and_size_check()
+    {
+        $this->assertTrue(
+            (new ZipContent([
+                'dummy.pdf',
+                'folder_1/text_file.txt' => 17,
+            ]))
+            ->passes(
+                'attribute',
+                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
+            )
+        );
+    }
+
+    public function test_false_when_invalid_file_passed_with_valid_file_and_size()
+    {
+        $this->assertFalse(
+            (new ZipContent([
+                'dummy.pdf',
+                'folder_1/text_file.txt' => 10,
+            ]))
+            ->passes(
+                'attribute',
+                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
+            )
         );
     }
 }

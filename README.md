@@ -48,6 +48,22 @@ If files are nested inside folders, pass relative path to file.
 
 Validator will fail if any of the passed files does not exist in ZIP archive.
 
+#### Checking file size
+
+Validator also allows checking maximum size of each file inside ZIP archive.
+
+Simply pass file name as array key and maximum size as value:
+``` php
+new ZipContent(['thumb.jpg' => 1024])
+```
+
+Above example will look for `thumb.jpg` file with maximum size of 1024 bytes.
+
+You can also mix multiple files simple name check and size check:
+``` php
+new ZipContent(['thumb.jpg' => 1024, 'logo.png'])
+```
+
 ### Testing
 
 ``` bash
@@ -77,7 +93,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 ## TODO
 
-- File size validation
+- Min/Max file size
 - Wildcard validation
 - Extension validation
 - "OR" validation

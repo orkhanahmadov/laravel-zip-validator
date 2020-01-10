@@ -39,8 +39,18 @@ class ZipContent implements Rule
     {
         $content = $this->readContent($zip);
 
-        $this->failedFiles = $this->files->reject(function ($file) use ($content) {
-            return $content->contains($file);
+        $this->failedFiles = $this->files->reject(function ($value, $key) use ($content) {
+            $names = $content->pluck('name');
+
+            if (! is_int($value)) {
+                return $names->contains($value);
+            }
+
+            if (! $names->contains($key)) {
+                return false;
+            }
+
+            return $content->firstWhere('name', $key)['size'] <= $value;
         });
 
         return ! $this->failedFiles->count();
@@ -60,7 +70,10 @@ class ZipContent implements Rule
 
         $content = collect();
         while ($file = zip_read($zip)) {
-            $content->add(zip_entry_name($file));
+            $content->add([
+                'name' => zip_entry_name($file),
+                'size' => zip_entry_filesize($file),
+            ]);
         }
 
         zip_close($zip);
@@ -75,7 +88,7 @@ class ZipContent implements Rule
      */
     public function message(): string
     {
-        return __('zipValidator::messages.not_found', [
+        return __('zipValidator::messages.failed', [
             'files' => $this->failedFiles->implode(', '),
         ]);
     }
