@@ -46,6 +46,12 @@ class ZipContent implements Rule
         return ! $this->failedFiles->count();
     }
 
+    /**
+     * Reads ZIP file content and returns collection with result.
+     *
+     * @param UploadedFile $value
+     * @return Collection
+     */
     private function readContent(UploadedFile $value): Collection
     {
         $zip = zip_open($value->path());
