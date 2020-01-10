@@ -25,19 +25,19 @@ class ZipContent implements Rule
      */
     public function __construct($files)
     {
-        $this->files = is_array($files) ? collect($files) : collect(explode(',', $files));
+        $this->files = is_array($files) ? collect($files) : collect(func_get_args());
     }
 
     /**
      * Determine if the validation rule passes.
      *
      * @param string $attribute
-     * @param UploadedFile $value
+     * @param UploadedFile $zip
      * @return bool
      */
-    public function passes($attribute, $value): bool
+    public function passes($attribute, $zip): bool
     {
-        $content = $this->readContent($value);
+        $content = $this->readContent($zip);
 
         $this->failedFiles = $this->files->reject(function ($file) use ($content) {
             return $content->contains($file);

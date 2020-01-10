@@ -11,7 +11,7 @@ class ZipContentTest extends TestCase
     public function test_returns_true_when_required_string_list_of_files_exist()
     {
         $this->assertTrue(
-            (new ZipContent('dummy.pdf,image.png,folder_1/text_file.txt'))
+            (new ZipContent('dummy.pdf', 'image.png', 'folder_1/text_file.txt'))
                 ->passes(
                     'attribute',
                     new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')

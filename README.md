@@ -43,7 +43,7 @@ public function rules()
 
 Constructor accepts single argument:
 * `files` - list of required files inside ZIP archive.
-You can pass files as comma separated string or array.
+You can pass files as different constructor arguments or as array.
 If files are nested inside folders, pass relative path to file.
 
 Validator will fail if any of the passed files does not exist in ZIP archive.
