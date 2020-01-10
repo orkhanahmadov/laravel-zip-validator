@@ -5,9 +5,7 @@ namespace Orkhanahmadov\LaravelZipValidator\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Orkhanahmadov\LaravelZipValidator\Exceptions\ZipException;
-use ZipArchive;
 
 class ZipContent implements Rule
 {
@@ -15,18 +13,6 @@ class ZipContent implements Rule
      * @var Collection
      */
     private $files;
-    /**
-     * @var \Illuminate\Contracts\Filesystem\Filesystem
-     */
-    private $storage;
-    /**
-     * @var string
-     */
-    private $workingDirectory;
-    /**
-     * @var ZipArchive
-     */
-    private $archive;
     /**
      * @var Collection
      */
@@ -36,14 +22,10 @@ class ZipContent implements Rule
      * Create a new rule instance.
      *
      * @param array|string $files
-     * @param string|null $storage
      */
-    public function __construct($files, ?string $storage = null)
+    public function __construct($files)
     {
         $this->files = is_array($files) ? collect($files) : collect(explode(',', $files));
-        $this->storage = Storage::disk($storage ?: config('filesystems.default'));
-        $this->workingDirectory = uniqid('zip-');
-        $this->archive = new ZipArchive();
     }
 
     /**
@@ -55,7 +37,7 @@ class ZipContent implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $content = $this->readZip($value);
+        $content = $this->readContent($value);
 
         $this->failedFiles = $this->files->reject(function ($file) use ($content) {
             return $content->contains($file);
@@ -64,7 +46,7 @@ class ZipContent implements Rule
         return ! $this->failedFiles->count();
     }
 
-    private function readZip(UploadedFile $value): Collection
+    private function readContent(UploadedFile $value): Collection
     {
         $zip = zip_open($value->path());
 

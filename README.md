@@ -6,10 +6,10 @@
 [![GitHub license](https://img.shields.io/github/license/orkhanahmadov/laravel-zip-validator.svg)](https://github.com/orkhanahmadov/laravel-zip-validator/blob/master/LICENSE.md)
 
 [![Build Status](https://travis-ci.org/orkhanahmadov/laravel-zip-validator.svg?branch=master)](https://travis-ci.org/orkhanahmadov/laravel-zip-validator)
-//[![Test Coverage](https://api.codeclimate.com/v1/badges/56bd16c9d7eb462261d3/test_coverage)](https://codeclimate.com/github/orkhanahmadov/laravel-zip-validator/test_coverage)
-//[![Maintainability](https://api.codeclimate.com/v1/badges/56bd16c9d7eb462261d3/maintainability)](https://codeclimate.com/github/orkhanahmadov/laravel-zip-validator/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/588a51182465fa590e49/test_coverage)](https://codeclimate.com/github/orkhanahmadov/laravel-zip-validator/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/588a51182465fa590e49/maintainability)](https://codeclimate.com/github/orkhanahmadov/laravel-zip-validator/maintainability)
 [![Quality Score](https://img.shields.io/scrutinizer/g/orkhanahmadov/laravel-zip-validator.svg)](https://scrutinizer-ci.com/g/orkhanahmadov/laravel-zip-validator)
-//[![StyleCI](https://github.styleci.io/repos/227684667/shield?branch=master)](https://github.styleci.io/repos/227684667)
+[![StyleCI](https://github.styleci.io/repos/232924943/shield?branch=master)](https://github.styleci.io/repos/232924943)
 
 Laravel validation rule for checking ZIP file content.
 
@@ -36,17 +36,17 @@ use Orkhanahmadov\LaravelZipValidator\Rules\ZipContent;
 public function rules()
 {
     return [
-        'file' => ['required', 'file', 'mimes:zip', new ZipContent('thumb.jpg,assets/logo.png')],
+        'file' => ['required', 'file', 'mimes:zip', new ZipContent(['thumb.jpg', 'assets/logo.png'])],
     ];
 }
 ```
 
-Constructor accepts 2 arguments:
+Constructor accepts single argument:
 * `files` - list of required files inside ZIP archive.
 You can pass files as comma separated string or array.
 If files are nested inside folders, pass relative path to file.
-* `storage driver` - Defines which storage driver should be used for unzipping, file validation processes.
-If nothing passed default filesystem driver will be used.
+
+Validator will fail if any of the passed files does not exist in ZIP archive.
 
 ### Testing
 
