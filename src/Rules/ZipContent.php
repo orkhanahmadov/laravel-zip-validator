@@ -6,9 +6,14 @@ use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Orkhanahmadov\ZipValidator\Exceptions\ZipException;
+use ZipArchive;
 
 class ZipContent implements Rule
 {
+    /**
+     * @var ZipArchive
+     */
+    private $zip;
     /**
      * @var Collection
      */
@@ -25,6 +30,7 @@ class ZipContent implements Rule
      */
     public function __construct($files)
     {
+        $this->zip = new ZipArchive();
         $this->files = is_array($files) ? collect($files) : collect(func_get_args());
     }
 
@@ -64,19 +70,20 @@ class ZipContent implements Rule
      */
     private function readContent(UploadedFile $value): Collection
     {
-        $zip = zip_open($value->path());
-
-        throw_unless(!is_int($zip), new ZipException($zip));
+        $zipOpen = $this->zip->open($value->path());
+        throw_unless($zipOpen === true, new ZipException($zipOpen));
 
         $content = collect();
-        while ($file = zip_read($zip)) {
+        for ($i = 0; $i < $this->zip->count(); $i++) {
+            $file = $this->zip->statIndex($i);
+
             $content->add([
-                'name' => zip_entry_name($file),
-                'size' => zip_entry_filesize($file),
+                'name' => $file['name'],
+                'size' => $file['size'],
             ]);
         }
 
-        zip_close($zip);
+        $this->zip->close();
 
         return $content;
     }
