@@ -75,12 +75,7 @@ class ZipContent implements Rule
 
         $content = collect();
         for ($i = 0; $i < $this->zip->count(); $i++) {
-            $file = $this->zip->statIndex($i);
-
-            $content->add([
-                'name' => $file['name'],
-                'size' => $file['size'],
-            ]);
+            $content->add($this->zip->statIndex($i));
         }
 
         $this->zip->close();

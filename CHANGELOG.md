@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zip-validator` will be documented in this file
 
+## 1.2.2 - 2020-01-12
+
+- ZIP content collection simplified with `statIndex()` usage
+
 ## 1.2.1 - 2020-01-12
 
 - PHP ZIP helper methods replaced with ZipArchive class methods
