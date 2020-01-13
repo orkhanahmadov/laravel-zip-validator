@@ -48,7 +48,7 @@ If files are nested inside folders, pass relative path to file.
 
 Validator will fail if any of the passed files does not exist in ZIP archive.
 
-#### Checking file size
+### Validating maximum file size
 
 Validator also allows checking maximum size of each file inside ZIP archive.
 
@@ -64,7 +64,7 @@ You can also mix multiple files simple name check and size check:
 new ZipContent(['thumb.jpg' => 1024, 'logo.png']);
 ```
 
-#### Multiple files with "OR" validation
+### Multiple files with "OR" validation
 
 You can also pass multiple files with `|` symbol, if any of them exist in ZIP file validator will succeed.
 ``` php
