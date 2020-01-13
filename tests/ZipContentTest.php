@@ -101,4 +101,36 @@ class ZipContentTest extends TestCase
             ]))->passes('attribute', $this->file)
         );
     }
+
+    public function test_validate_method()
+    {
+        $zipContent = collect([
+            [
+                'name' => 'one',
+                'size' => 10,
+            ],
+            [
+                'name' => 'two',
+                'size' => 20,
+            ],
+        ]);
+        $zip = new ZipContent('field');
+
+        $this->assertTrue($zip->validate($zipContent, 'two', 0));
+        $this->assertTrue($zip->validate($zipContent, 10, 'one'));
+        $this->assertFalse($zip->validate($zipContent, 9, 'one'));
+        $this->assertFalse($zip->validate($zipContent, 'three', 0));
+        $this->assertFalse($zip->validate($zipContent, 30, 'three'));
+    }
+
+    public function test_contains_method()
+    {
+        $names = collect(['one', 'two']);
+        $zip = new ZipContent('field');
+
+        $this->assertSame('two', $zip->contains($names, 'two'));
+        $this->assertSame('one', $zip->contains($names, 'one|four'));
+        $this->assertNull($zip->contains($names, 'three|four'));
+        $this->assertNull($zip->contains($names, 'three'));
+    }
 }

@@ -43,24 +43,51 @@ class ZipContent implements Rule
      */
     public function passes($attribute, $zip): bool
     {
-        $content = $this->readContent($zip);
+        $zipContent = $this->readContent($zip);
 
-        $this->failedFiles = $this->files->reject(function ($value, $key) use ($content) {
-            $namesInsideZip = $content->pluck('name');
-
-            if (! is_int($value)) {
-                return $this->contains($namesInsideZip, $value);
-            }
-
-            $matchingName = $this->contains($namesInsideZip, $key);
-            if (! $matchingName) {
-                return false;
-            }
-
-            return $content->firstWhere('name', $matchingName)['size'] <= $value;
+        $this->failedFiles = $this->files->reject(function ($value, $key) use ($zipContent) {
+            return $this->validate($zipContent, $value, $key);
         });
 
-        return ! $this->failedFiles->count();
+        return $this->failedFiles->count() === 0;
+    }
+
+    /**
+     * @param Collection $zipContent
+     * @param string|int $value
+     * @param string|int $key
+     *
+     * @return bool
+     */
+    public function validate(Collection $zipContent, $value, $key): bool
+    {
+        if (! is_int($value)) {
+            return (bool) $this->contains($zipContent->pluck('name'), $value);
+        }
+
+        $existingName = $this->contains($zipContent->pluck('name'), $key);
+        if (! $existingName) {
+            return false;
+        }
+
+        return $zipContent->firstWhere('name', $existingName)['size'] <= $value;
+    }
+
+    /**
+     * Checks if file name exists in ZIP file. Returns matching file name, null otherwise.
+     *
+     * @param Collection $names
+     * @param string $search
+     *
+     * @return string|null
+     */
+    public function contains(Collection $names, string $search): ?string
+    {
+        $options = explode('|', $search);
+
+        return $names->first(function ($name) use ($options) {
+            return in_array($name, $options);
+        });
     }
 
     /**
@@ -95,22 +122,5 @@ class ZipContent implements Rule
         $this->zip->close();
 
         return $content;
-    }
-
-    /**
-     * Checks if file name exists in ZIP file. Returns matching file name, null otherwise.
-     *
-     * @param Collection $namesInsideZip
-     * @param string $search
-     *
-     * @return string|null
-     */
-    private function contains(Collection $namesInsideZip, string $search): ?string
-    {
-        $options = explode('|', $search);
-
-        return $namesInsideZip->first(function ($name) use ($options) {
-            return in_array($name, $options);
-        });
     }
 }
