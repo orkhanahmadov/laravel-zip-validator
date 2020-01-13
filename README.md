@@ -16,7 +16,7 @@ Laravel validation rule for checking ZIP file content.
 ## Requirements
 
 - Laravel **5.8.** or **^6.0** or higher
-- PHP **7.2** or higher.
+- PHP **7.2** or higher with `zip` extension enabled.
 
 ## Installation
 
@@ -112,5 +112,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 ## TODO
 
-- Min/Max file size
 - Wildcard validation
