@@ -130,6 +130,8 @@ class ZipContentTest extends TestCase
 
         $this->assertSame('two', $zip->contains($names, 'two'));
         $this->assertSame('one', $zip->contains($names, 'one|four'));
+        $this->assertSame('one', $zip->contains($names, 'one|two'));
+        $this->assertSame('one', $zip->contains($names, 'two|one'));
         $this->assertNull($zip->contains($names, 'three|four'));
         $this->assertNull($zip->contains($names, 'three'));
     }

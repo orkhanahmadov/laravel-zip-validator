@@ -59,7 +59,7 @@ new ZipContent(['thumb.jpg' => 1024]);
 
 Validator in above example will look for `thumb.jpg` file with maximum size of 1024 bytes.
 
-You can also mix multiple files simple name check and size check:
+You can also mix multiple files with name-only or name+size validation:
 ``` php
 new ZipContent(['thumb.jpg' => 1024, 'logo.png']);
 ```
@@ -68,10 +68,20 @@ new ZipContent(['thumb.jpg' => 1024, 'logo.png']);
 
 You can also pass multiple files with `|` symbol, if any of them exist in ZIP file validator will succeed.
 ``` php
-new ZipContent(['thumb.jpg|thumb.png|thumb.svg']);
+new ZipContent('thumb.jpg|thumb.png|thumb.svg');
 ```
 
 Validator in above example will look if `thumb.jpg`, `thumb.png` or `thumb.svg` file exists in ZIP.
+
+Of course, you can also validate file size with "OR" validation:
+``` php
+new ZipContent(['thumb.jpg|thumb.png' => 1024]);
+```
+
+Above example will look if `thumb.jpg` or `thumb.png` file exists in ZIP and its file size is not bigger than 1024 bytes.
+
+**Important** to keep in mind that when using "OR" validation with additional file size validation, 
+validator will compare file size with the first matching element in ZIP archive.
 
 ### Testing
 
