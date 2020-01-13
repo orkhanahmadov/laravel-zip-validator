@@ -16,7 +16,7 @@ Laravel validation rule for checking ZIP file content.
 ## Requirements
 
 - Laravel **5.8.** or **^6.0** or higher
-- PHP **7.2** or higher with `zip` extension enabled.
+- PHP **7.2** or higher with `zip` extension enabled
 
 ## Installation
 
@@ -61,7 +61,7 @@ Validator in above example will look for `thumb.jpg` file with maximum size of 1
 
 You can also mix multiple files with name-only or name+size validation:
 ``` php
-new ZipContent(['thumb.jpg' => 1024, 'logo.png']);
+new ZipContent(['thumb.jpg' => 100000, 'logo.png']);
 ```
 
 ### Multiple files with "OR" validation
