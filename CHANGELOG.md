@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-zip-validator` will be documented in this file
 
+## 1.3.0 - 2020-01-13
+
+- "OR" file validation added.
+You can pass multiple files with `|`, 
+validator will succeed if any of the files exist in ZIP file. Example: `document.pdf|homework.doc|my-doc.pdf`
+
 ## 1.2.2 - 2020-01-12
 
 - ZIP content collection simplified with `statIndex()` usage

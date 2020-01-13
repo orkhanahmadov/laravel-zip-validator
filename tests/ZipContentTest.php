@@ -2,7 +2,6 @@
 
 namespace Orkhanahmadov\ZipValidator\Tests;
 
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Lang;
 use Orkhanahmadov\ZipValidator\Rules\ZipContent;
 
@@ -12,10 +11,7 @@ class ZipContentTest extends TestCase
     {
         $this->assertTrue(
             (new ZipContent('dummy.pdf', 'image.png', 'folder_1/text_file.txt'))
-                ->passes(
-                    'attribute',
-                    new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
-                )
+                ->passes('attribute', $this->file)
         );
 
         $this->assertTrue(
@@ -23,10 +19,7 @@ class ZipContentTest extends TestCase
                 'dummy.pdf',
                 'image.png',
                 'folder_1/text_file.txt',
-            ]))->passes(
-                'attribute',
-                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
-            )
+            ]))->passes('attribute', $this->file)
         );
     }
 
@@ -42,12 +35,7 @@ class ZipContentTest extends TestCase
             'folder_1/text_file.png',
         ]);
 
-        $this->assertFalse(
-            $rule->passes(
-                'attribute',
-                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
-            )
-        );
+        $this->assertFalse($rule->passes('attribute', $this->file));
         $this->assertSame(
             'image_2.png, folder_1/text_file.png',
             $rule->message()
@@ -60,11 +48,17 @@ class ZipContentTest extends TestCase
             (new ZipContent([
                 'dummy.pdf' => 14000, // 13264
                 'folder_1/text_file.txt' => 16,
-            ]))
-            ->passes(
-                'attribute',
-                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
-            )
+            ]))->passes('attribute', $this->file)
+        );
+    }
+
+    public function test_returns_true_if_one_of_the_options_exist()
+    {
+        $this->assertTrue(
+            (new ZipContent([
+                'dummy.pdf' => 14000,
+                'folder_1/text.text|folder_1/text_file.txt' => 16,
+            ]))->passes('attribute', $this->file)
         );
     }
 
@@ -74,11 +68,7 @@ class ZipContentTest extends TestCase
             (new ZipContent([
                 'dummy.pdf' => 14000,
                 'folder_1/text_file.txt' => 10,
-            ]))
-            ->passes(
-                'attribute',
-                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
-            )
+            ]))->passes('attribute', $this->file)
         );
     }
 
@@ -88,11 +78,7 @@ class ZipContentTest extends TestCase
             (new ZipContent([
                 'dummy.pdf' => 14000, // 13264
                 'folder_1/text_file_2.txt' => 16,
-            ]))
-            ->passes(
-                'attribute',
-                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
-            )
+            ]))->passes('attribute', $this->file)
         );
     }
 
@@ -102,11 +88,7 @@ class ZipContentTest extends TestCase
             (new ZipContent([
                 'dummy.pdf',
                 'folder_1/text_file.txt' => 17,
-            ]))
-            ->passes(
-                'attribute',
-                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
-            )
+            ]))->passes('attribute', $this->file)
         );
     }
 
@@ -116,11 +98,7 @@ class ZipContentTest extends TestCase
             (new ZipContent([
                 'dummy.pdf',
                 'folder_1/text_file.txt' => 10,
-            ]))
-            ->passes(
-                'attribute',
-                new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip')
-            )
+            ]))->passes('attribute', $this->file)
         );
     }
 }

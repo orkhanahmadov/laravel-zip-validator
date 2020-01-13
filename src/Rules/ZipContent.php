@@ -46,26 +46,40 @@ class ZipContent implements Rule
         $content = $this->readContent($zip);
 
         $this->failedFiles = $this->files->reject(function ($value, $key) use ($content) {
-            $names = $content->pluck('name');
+            $namesInsideZip = $content->pluck('name');
 
             if (! is_int($value)) {
-                return $names->contains($value);
+                return $this->contains($namesInsideZip, $value);
             }
 
-            if (! $names->contains($key)) {
+            $matchingName = $this->contains($namesInsideZip, $key);
+            if (! $matchingName) {
                 return false;
             }
 
-            return $content->firstWhere('name', $key)['size'] <= $value;
+            return $content->firstWhere('name', $matchingName)['size'] <= $value;
         });
 
         return ! $this->failedFiles->count();
     }
 
     /**
+     * Get the validation error message.
+     *
+     * @return string
+     */
+    public function message(): string
+    {
+        return __('zipValidator::messages.failed', [
+            'files' => $this->failedFiles->implode(', '),
+        ]);
+    }
+
+    /**
      * Reads ZIP file content and returns collection with result.
      *
      * @param UploadedFile $value
+     *
      * @return Collection
      */
     private function readContent(UploadedFile $value): Collection
@@ -84,14 +98,19 @@ class ZipContent implements Rule
     }
 
     /**
-     * Get the validation error message.
+     * Checks if file name exists in ZIP file. Returns matching file name, null otherwise.
      *
-     * @return string
+     * @param Collection $namesInsideZip
+     * @param string $search
+     *
+     * @return string|null
      */
-    public function message(): string
+    private function contains(Collection $namesInsideZip, string $search): ?string
     {
-        return __('zipValidator::messages.failed', [
-            'files' => $this->failedFiles->implode(', '),
-        ]);
+        $options = explode('|', $search);
+
+        return $namesInsideZip->first(function ($name) use ($options) {
+            return in_array($name, $options);
+        });
     }
 }

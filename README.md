@@ -54,15 +54,24 @@ Validator also allows checking maximum size of each file inside ZIP archive.
 
 Simply pass file name as array key and maximum size as value:
 ``` php
-new ZipContent(['thumb.jpg' => 1024])
+new ZipContent(['thumb.jpg' => 1024]);
 ```
 
-Above example will look for `thumb.jpg` file with maximum size of 1024 bytes.
+Validator in above example will look for `thumb.jpg` file with maximum size of 1024 bytes.
 
 You can also mix multiple files simple name check and size check:
 ``` php
-new ZipContent(['thumb.jpg' => 1024, 'logo.png'])
+new ZipContent(['thumb.jpg' => 1024, 'logo.png']);
 ```
+
+#### Multiple files with "OR" validation
+
+You can also pass multiple files with `|` symbol, if any of them exist in ZIP file validator will succeed.
+``` php
+new ZipContent(['thumb.jpg|thumb.png|thumb.svg']);
+```
+
+Validator in above example will look if `thumb.jpg`, `thumb.png` or `thumb.svg` file exists in ZIP.
 
 ### Testing
 
@@ -95,5 +104,3 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 - Min/Max file size
 - Wildcard validation
-- Extension validation
-- "OR" validation
