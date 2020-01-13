@@ -38,18 +38,30 @@ class ZipContent implements Rule
      * Determine if the validation rule passes.
      *
      * @param string $attribute
-     * @param UploadedFile $zip
+     * @param UploadedFile $zipFile
      * @return bool
      */
-    public function passes($attribute, $zip): bool
+    public function passes($attribute, $zipFile): bool
     {
-        $zipContent = $this->readContent($zip);
+        $zipContent = $this->readContent($zipFile);
 
         $this->failedFiles = $this->files->reject(function ($value, $key) use ($zipContent) {
             return $this->validate($zipContent, $value, $key);
         });
 
         return $this->failedFiles->count() === 0;
+    }
+
+    /**
+     * Get the validation error message.
+     *
+     * @return string
+     */
+    public function message(): string
+    {
+        return __('zipValidator::messages.failed', [
+            'files' => $this->failedFiles->implode(', '),
+        ]);
     }
 
     /**
@@ -91,27 +103,15 @@ class ZipContent implements Rule
     }
 
     /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message(): string
-    {
-        return __('zipValidator::messages.failed', [
-            'files' => $this->failedFiles->implode(', '),
-        ]);
-    }
-
-    /**
      * Reads ZIP file content and returns collection with result.
      *
-     * @param UploadedFile $value
+     * @param UploadedFile $zipFile
      *
      * @return Collection
      */
-    private function readContent(UploadedFile $value): Collection
+    private function readContent(UploadedFile $zipFile): Collection
     {
-        $zipOpen = $this->zip->open($value->path());
+        $zipOpen = $this->zip->open($zipFile->path());
         throw_unless($zipOpen === true, new ZipException($zipOpen));
 
         $content = collect();
