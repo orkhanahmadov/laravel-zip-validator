@@ -41,8 +41,8 @@ public function rules()
 }
 ```
 
-Constructor accepts single argument:
-- `files` - list of required files inside ZIP archive.
+Pass list of required files/folders to the constructor of the validator.
+
 You can pass files as different constructor arguments or as array.
 If files are nested inside folders, pass relative path to file.
 
@@ -82,6 +82,17 @@ Above example will look if `thumb.jpg` or `thumb.png` file exists in ZIP and its
 
 **Important** to keep in mind that when using "OR" validation with additional file size validation, 
 validator will compare file size with the first matching element in ZIP archive.
+
+### Rejecting empty files
+
+By default, validator only checks if file with given name exists, 
+it will return true even if file with matching name is empty (has size of 0 bytes).
+
+You can pass array of files as first argument and 
+`false` as second argument to constructor if you want validator to reject files with 0 bytes.
+``` php
+new ZipContent(['thumb.jpg', 'style.css'], false);
+```
 
 ### Testing
 

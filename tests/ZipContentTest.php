@@ -10,6 +10,11 @@ class ZipContentTest extends TestCase
     public function test_returns_true_when_required_string_list_of_files_exist()
     {
         $this->assertTrue(
+            (new ZipContent('dummy.pdf', false))
+                ->passes('attribute', $this->file)
+        );
+
+        $this->assertTrue(
             (new ZipContent('dummy.pdf', 'image.png', 'folder_1/text_file.txt'))
                 ->passes('attribute', $this->file)
         );
@@ -113,14 +118,28 @@ class ZipContentTest extends TestCase
                 'name' => 'two',
                 'size' => 20,
             ],
+            [
+                'name' => 'ten',
+                'size' => 0,
+            ],
         ]);
         $zip = new ZipContent('field');
 
         $this->assertTrue($zip->validate($zipContent, 'two', 0));
         $this->assertTrue($zip->validate($zipContent, 10, 'one'));
+        $this->assertTrue($zip->validate($zipContent, 'ten', 0));
+        $this->assertTrue($zip->validate($zipContent, 'ten', 10));
         $this->assertFalse($zip->validate($zipContent, 9, 'one'));
         $this->assertFalse($zip->validate($zipContent, 'three', 0));
         $this->assertFalse($zip->validate($zipContent, 30, 'three'));
+        $this->assertFalse(
+            (new ZipContent('field', false))
+                ->validate($zipContent, 'ten', 0)
+        );
+        $this->assertFalse(
+            (new ZipContent('field', false))
+                ->validate($zipContent, 10, 'ten')
+        );
     }
 
     public function test_contains_method()

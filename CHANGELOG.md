@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zip-validator` will be documented in this file
 
+## 1.4.0 - 2020-01-14
+
+- "Allow empty" rule introduced as second constructor argument. By default set to `true`
+
 ## 1.3.0 - 2020-01-13
 
 - "OR" file validation added.

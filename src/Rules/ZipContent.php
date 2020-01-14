@@ -19,6 +19,10 @@ class ZipContent implements Rule
      */
     private $files;
     /**
+     * @var bool|string
+     */
+    private $allowEmpty;
+    /**
      * @var Collection
      */
     private $failedFiles;
@@ -27,11 +31,13 @@ class ZipContent implements Rule
      * Create a new rule instance.
      *
      * @param array|string $files
+     * @param bool|string $allowEmpty
      */
-    public function __construct($files)
+    public function __construct($files, $allowEmpty = true)
     {
         $this->zip = new ZipArchive();
-        $this->files = is_array($files) ? collect($files) : collect(func_get_args());
+        $this->files = is_bool($allowEmpty) ? collect($files) : collect(func_get_args());
+        $this->allowEmpty = $allowEmpty;
     }
 
     /**
@@ -74,15 +80,27 @@ class ZipContent implements Rule
     public function validate(Collection $zipContent, $value, $key): bool
     {
         if (! is_int($value)) {
-            return (bool) $this->contains($zipContent->pluck('name'), $value);
+            $entityName = $this->contains($zipContent->pluck('name'), $value);
+
+            if ($this->allowEmpty) {
+                return (bool) $entityName;
+            }
+
+            return $zipContent->firstWhere('name', $entityName)['size'] > 0;
         }
 
-        $existingName = $this->contains($zipContent->pluck('name'), $key);
-        if (! $existingName) {
+        $entityName = $this->contains($zipContent->pluck('name'), $key);
+        if (! $entityName) {
             return false;
         }
 
-        return $zipContent->firstWhere('name', $existingName)['size'] <= $value;
+        $entitySize = $zipContent->firstWhere('name', $entityName)['size'];
+
+        if ($this->allowEmpty) {
+            return $entitySize <= $value;
+        }
+
+        return $entitySize > 0 && $entitySize <= $value;
     }
 
     /**
