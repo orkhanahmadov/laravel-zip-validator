@@ -11,11 +11,11 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/orkhanahmadov/laravel-zip-validator.svg)](https://scrutinizer-ci.com/g/orkhanahmadov/laravel-zip-validator)
 [![StyleCI](https://github.styleci.io/repos/232924943/shield?branch=master)](https://github.styleci.io/repos/232924943)
 
-Laravel validation rule for checking ZIP file content.
+Custom Laravel validation rule for checking ZIP file content.
 
 ## Requirements
 
-- Laravel **5.8.** or **^6.0** or higher
+- Laravel **5.8.*** or **^6.0**
 - PHP **7.2** or higher with `zip` extension enabled
 
 ## Installation
