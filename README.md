@@ -36,7 +36,12 @@ use Orkhanahmadov\ZipValidator\Rules\ZipContent;
 public function rules()
 {
     return [
-        'file' => ['required', 'file', 'mimes:zip', new ZipContent('thumb.jpg', 'assets/logo.png')],
+        'file' => [
+            'required',
+            'file',
+            'mimes:zip',
+            new ZipContent('thumb.jpg', 'assets/logo.png'),
+        ],
     ];
 }
 ```
