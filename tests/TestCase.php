@@ -9,9 +9,13 @@ use Orkhanahmadov\ZipValidator\ZipValidatorServiceProvider;
 abstract class TestCase extends Orchestra
 {
     /**
+     * @var string
+     */
+    protected $filePath;
+    /**
      * @var UploadedFile
      */
-    protected $file;
+    protected $uploadedFile;
 
     protected function getPackageProviders($app)
     {
@@ -24,6 +28,7 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->file = new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip');
+        $this->filePath = __DIR__ . '/__fixtures__/file.zip';
+        $this->uploadedFile = new UploadedFile(__DIR__ . '/__fixtures__/file.zip', 'file.zip');
     }
 }
