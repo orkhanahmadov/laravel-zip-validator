@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-zip-validator` will be documented in this file
 
+## 1.6.0 - 2020-03-04
+
+- Added support for Laravel 7
+- Dropped support for Laravel 5.8
+
 ## 1.5.0 - 2020-02-03
 
 - Validator logic extracted to `Orkhanahmadov\ZipValidator\Validator` class.
