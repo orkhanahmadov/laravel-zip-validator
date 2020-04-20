@@ -1,5 +1,6 @@
 # Laravel ZIP file validator
 
+[![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/orkhanahmadov/laravel-zip-validator)
 [![Latest Stable Version](https://poser.pugx.org/orkhanahmadov/laravel-zip-validator/v/stable)](https://packagist.org/packages/orkhanahmadov/laravel-zip-validator)
 [![Latest Unstable Version](https://poser.pugx.org/orkhanahmadov/laravel-zip-validator/v/unstable)](https://packagist.org/packages/orkhanahmadov/laravel-zip-validator)
 [![Total Downloads](https://img.shields.io/packagist/dt/orkhanahmadov/laravel-zip-validator)](https://packagist.org/packages/orkhanahmadov/laravel-zip-validator)
