@@ -19,12 +19,18 @@ matrix:
         - php: 7.3
           env: LARAVEL_VERSION=~6.0  TESTBENCH_VERSION=~4.0  PHPUNIT_VERSION=~8.0
         - php: 7.3
+          env: LARAVEL_VERSION=~7.0  TESTBENCH_VERSION=~5.0  PHPUNIT_VERSION=~8.0
+        - php: 7.3
           env: LARAVEL_VERSION=~7.0  TESTBENCH_VERSION=~5.0  PHPUNIT_VERSION=~9.0
+        - php: 7.3
+          env: LARAVEL_VERSION=~8.0  TESTBENCH_VERSION=~6.0  PHPUNIT_VERSION=~9.0
 
         - php: 7.4
           env: LARAVEL_VERSION=~6.0  TESTBENCH_VERSION=~4.0  PHPUNIT_VERSION=~8.0
         - php: 7.4
           env: LARAVEL_VERSION=~7.0  TESTBENCH_VERSION=~5.0  PHPUNIT_VERSION=~9.0
+        - php: 7.4
+          env: LARAVEL_VERSION=~8.0  TESTBENCH_VERSION=~6.0  PHPUNIT_VERSION=~9.0
 
 before_install:
     - travis_retry composer self-update
@@ -34,7 +40,6 @@ before_install:
     - composer global require hirak/prestissimo --update-no-dev
 
 install:
-    - composer require "illuminate/http:${LARAVEL_VERSION}" --no-update --no-interaction --prefer-dist
     - composer require "illuminate/contracts:${LARAVEL_VERSION}" --no-update --no-interaction --prefer-dist
     - composer require "illuminate/support:${LARAVEL_VERSION}" --no-update --no-interaction --prefer-dist
     - composer require "orchestra/testbench:${TESTBENCH_VERSION}" --no-update --no-interaction --prefer-dist
