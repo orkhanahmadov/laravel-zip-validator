@@ -77,7 +77,7 @@ You can also pass multiple files with `|` symbol, if any of them exist in ZIP fi
 new ZipContent('thumb.jpg|thumb.png|thumb.svg');
 ```
 
-Validator in above example will look if `thumb.jpg`, `thumb.png` or `thumb.svg` file exists in ZIP.
+Validator in above example will look if `thumb.jpg` or `thumb.png` or `thumb.svg` file exists in ZIP.
 
 Of course, you can also validate file size with "OR" validation:
 ``` php
