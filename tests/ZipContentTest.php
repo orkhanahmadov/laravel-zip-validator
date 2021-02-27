@@ -28,6 +28,21 @@ class ZipContentTest extends TestCase
         );
     }
 
+    public function test_default_error_from_translations()
+    {
+        $rule = new ZipContent([
+            'dummy.pdf',
+            'image_2.png',
+            'folder_1/text_file.png',
+        ]);
+
+        $this->assertFalse($rule->passes('attribute', $this->uploadedFile));
+        $this->assertSame(
+            'Following files in ZIP archive do not meet requirements: image_2.png, folder_1/text_file.png',
+            $rule->message()
+        );
+    }
+
     public function test_returns_false_when_required_list_of_files_do_not_exist()
     {
         Lang::addLines([
