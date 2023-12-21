@@ -6,7 +6,7 @@ use Orkhanahmadov\ZipValidator\Validator;
 
 class ValidatorTest extends TestCase
 {
-    public function test_validates_with_string_and_array_list_of_files()
+    public function testValidatesWithStringAndArrayListOfFiles()
     {
         $this->assertCount(
             0,
@@ -23,7 +23,7 @@ class ValidatorTest extends TestCase
         $this->assertSame('folder_1/text_file_2.txt', $failedFiles->first());
     }
 
-    public function test_file_size_check()
+    public function testFileSizeCheck()
     {
         $this->assertCount(
             0,
@@ -34,7 +34,30 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function test_returns_true_if_one_of_the_options_exist()
+    public function testCheckWithWildcard()
+    {
+        $this->assertCount(
+            0,
+            Validator::rules(['*.pdf'])->validate($this->filePath) // dummy.pdf exists
+        );
+
+        $this->assertCount(
+            0,
+            Validator::rules(['*.doc|folder_1/*.txt'])->validate($this->filePath) // doc does not exist but txt does
+        );
+
+        $this->assertCount(
+            1,
+            Validator::rules(['*.doc|*.xls'])->validate($this->filePath) // both does not exist
+        );
+
+        $this->assertCount(
+            1,
+            Validator::rules(['*.pdf|*.xls' => 13000])->validate($this->filePath) // both does not exist
+        );
+    }
+
+    public function testReturnsTrueIfOneOfTheOptionsExist()
     {
         $this->assertCount(
             0,
@@ -45,7 +68,7 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function test_returns_false_if_file_size_does_not_meet_the_requirements()
+    public function testReturnsFalseIfFileSizeDoesNotMeetTheRequirements()
     {
         $failedFiles = Validator::rules(['dummy.pdf' => 14000, 'folder_1/text_file.txt' => 10])->validate($this->filePath);
 
@@ -53,7 +76,7 @@ class ValidatorTest extends TestCase
         $this->assertSame('folder_1/text_file.txt', $failedFiles->first());
     }
 
-    public function test_returns_false_when_valid_file_size_but_wrong_file_name_passed()
+    public function testReturnsFalseWhenValidFileSizeButWrongFileNamePassed()
     {
         $failedFiles = Validator::rules(['dummy.pdf' => 14000, 'folder_1/text_file_2.txt' => 16])->validate($this->filePath);
 
@@ -61,7 +84,7 @@ class ValidatorTest extends TestCase
         $this->assertSame('folder_1/text_file_2.txt', $failedFiles->first());
     }
 
-    public function test_true_when_valid_files_passed_as_mixed_simple_array_and_size_check()
+    public function testTrueWhenValidFilesPassedAsMixedSimpleArrayAndSizeCheck()
     {
         $this->assertCount(
             0,
@@ -69,7 +92,7 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function test_false_when_invalid_file_passed_with_valid_file_and_size()
+    public function testFalseWhenInvalidFilePassedWithValidFileAndSize()
     {
         $failedFiles = Validator::rules(['dummy.pdf', 'folder_1/text_file.txt' => 10])->validate($this->filePath);
 
@@ -80,7 +103,7 @@ class ValidatorTest extends TestCase
         $this->assertSame('folder_1/text_file.txt', $failedFiles->first());
     }
 
-    public function test_validate_method()
+    public function testValidateMethod()
     {
         $zipContent = collect([
             ['name' => 'one', 'size' => 10],
@@ -99,7 +122,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse(Validator::rules([], false)->checkFile($zipContent, 10, 'ten'));
     }
 
-    public function test_contains_method()
+    public function testContainsMethod()
     {
         $names = collect(['one', 'two']);
         $zip = new Validator([]);

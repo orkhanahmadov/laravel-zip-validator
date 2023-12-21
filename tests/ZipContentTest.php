@@ -7,7 +7,7 @@ use Orkhanahmadov\ZipValidator\Rules\ZipContent;
 
 class ZipContentTest extends TestCase
 {
-    public function test_returns_true_when_required_string_list_of_files_exist()
+    public function testReturnsTrueWhenRequiredStringListOfFilesExist()
     {
         $this->assertTrue(
             (new ZipContent('dummy.pdf', false))
@@ -28,7 +28,7 @@ class ZipContentTest extends TestCase
         );
     }
 
-    public function test_default_error_from_translations()
+    public function testDefaultErrorFromTranslations()
     {
         $rule = new ZipContent([
             'dummy.pdf',
@@ -43,7 +43,7 @@ class ZipContentTest extends TestCase
         );
     }
 
-    public function test_returns_false_when_required_list_of_files_do_not_exist()
+    public function testReturnsFalseWhenRequiredListOfFilesDoNotExist()
     {
         Lang::addLines([
             'messages.failed' => ':files',

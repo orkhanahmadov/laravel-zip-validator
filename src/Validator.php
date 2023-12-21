@@ -108,7 +108,12 @@ class Validator
         $options = explode('|', $search);
 
         return $names->first(function ($name) use ($options) {
-            return in_array($name, $options);
+            foreach ($options as $option) {
+                if (fnmatch($option, $name)) {
+                    return true;
+                }
+            }
+            return false;
         });
     }
 
