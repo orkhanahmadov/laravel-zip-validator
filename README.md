@@ -107,7 +107,7 @@ Additionally, you can use wildcard filename matching with `*` symbol.
 new ZipContent('*.jpg');
 ```
 
-This will return true Zip archive contains any file with `.jpg` extension.
+This will return true if Zip archive contains any file with `.jpg` extension.
 
 Filename matching is using [fnmatch](https://www.php.net/manual/en/function.fnmatch.php) function. You can use any of its [patterns](https://www.php.net/manual/en/function.fnmatch.php#refsect1-function.fnmatch-parameters). 
 
