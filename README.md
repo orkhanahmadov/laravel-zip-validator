@@ -100,6 +100,17 @@ You can pass array of files as first argument and
 new ZipContent(['thumb.jpg', 'style.css'], false);
 ```
 
+### Wildcard filename matching
+
+Additionally, you can use wildcard filename matching with `*` symbol.
+```php
+new ZipContent('*.jpg');
+```
+
+This will return true Zip archive contains any file with `.jpg` extension.
+
+Filename matching is using [fnmatch](https://www.php.net/manual/en/function.fnmatch.php) function. You can use any of its [patterns](https://www.php.net/manual/en/function.fnmatch.php#refsect1-function.fnmatch-parameters). 
+
 ### Testing
 
 ``` bash
