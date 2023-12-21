@@ -16,8 +16,8 @@ Custom Laravel validation rule for checking ZIP file content.
 
 ## Requirements
 
-- Laravel **6** or higher
-- PHP **7.2** or higher with `zip` extension enabled
+- Laravel **9** or higher
+- PHP **8.0** or higher with `zip` extension enabled
 
 ## Installation
 
